@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app.apps.AppConfig'
 ]
 
 MIDDLEWARE = [
@@ -73,6 +74,7 @@ WSGI_APPLICATION = 'semillita.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -80,26 +82,27 @@ DATABASES = {
     }
 }
 """
+
 DATABASES = {
 
     'default': {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': `<db_name>`,
+        'NAME': 'dfvptvl55qrane',
 
-        'USER': '<db_username>',
+        'USER': 'ucfcfnmlmklvze',
 
-        'PASSWORD': '<password>',
+        'PASSWORD': '36f17b2f1134b7afcb083362b178f695558dfd90b107b2fe8600da4de5481501',
 
-        'HOST': '<db_hostname_or_ip>',
+        'HOST': 'ec2-3-223-169-166.compute-1.amazonaws.com',
 
-        'PORT': '<db_port>',
+        'PORT': '5432',
 
     }
 
 }
-"""
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
