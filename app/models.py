@@ -5,12 +5,12 @@ class Uso(models.Model):
     nombre = models.TextField()
 
 class Planta(models.Model):
-    nombre_cientifico = models.CharField(max_length=64)
-    nombre_tradicional = models.CharField(max_length=32)
-    especie = models.CharField(max_length=16)
-    origen = models.CharField(max_length=32)
-    temporada = models.CharField(max_length=24)
-    estatus = models.BooleanField(default=True)
+    nombre_cientifico = models.TextField()
+    nombre_tradicional = models.TextField()
+    especie = models.TextField()
+    origen = models.TextField()
+    temporada = models.TextField()
+    estatus = models.BooleanField(default=True, editable=True)
     descripcion = models.TextField()
     fertilizante = models.TextField()
     riego = models.TextField()
