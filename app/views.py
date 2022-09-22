@@ -83,8 +83,7 @@ class AnaliticosViewSet(viewsets.ViewSet):
             temp_plant_dict['count'] = Analiticos.objects.all().filter(planta_id=plant.id).count()
             plant_list.append(temp_plant_dict)
 
-        popularPlantID = max(plant_list, key=lambda x: x['count'])
-        popularPlant = Planta.objects.all().filter(id=popularPlantID['id']).first()
-        serialized_popularPlant = PlantaSerializer(popularPlant)
+        popularPlantsSortedIDs = [plant['id'] for plant in sorted(plant_list, key=lambda x: x['count'], reverse=True)[0:3]]
+        popularPlantsSerialized = [PlantaSerializer(plant).data for plant in Planta.objects.filter(id__in=popularPlantsSortedIDs)]
 
-        return Response(serialized_popularPlant.data)
+        return Response(popularPlantsSerialized, status=status.HTTP_200_OK)
