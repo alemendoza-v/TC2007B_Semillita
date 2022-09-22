@@ -1,6 +1,8 @@
 from .models import Planta, Uso, Imagen
 from rest_framework import serializers
 
+import base64
+
 class UsoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Uso

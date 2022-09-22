@@ -4,8 +4,9 @@ from rest_framework.response import Response
 from app.models import Planta, Imagen
 from app.serializers import PlantaSerializer, ImagenSerializer
 
-from forms import ImagenForm
-
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+import base64
 class PlantaViewSet(viewsets.ModelViewSet):
     serializer_class = PlantaSerializer
 
@@ -46,13 +47,24 @@ class ImagenViewSet(viewsets.ModelViewSet):
         return queryset
 
     def create(self, request):
-        imagen_form = ImagenForm(request.POST, request.FILES)
-        if imagen_form.is_valid():
-            imagen = imagen_form.save()
-            serializer_context = {
-                'request': request,
-            }
-            return Response(self.serializer_class(imagen).data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        data = request.data
+        image = request.FILES.get('dato').read()
+        image_encoded = base64.b64encode(image).decode('ascii')
+
+        new_image = Imagen.objects.create(
+            dato=image_encoded,
+            tipo=data['tipo'],
+        )
+        new_plant = get_object_or_404(Planta, pk=data['planta_id'])
+        new_image.planta = new_plant
+        new_image.save()
+        serializer_context = {
+            'request': request,
+        }
+        serializer = ImagenSerializer(new_image, context=serializer_context)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def retrieve(self, request, pk=None):
+        image = get_object_or_404(Imagen, pk=pk)
         
+        return Response(image.dato, content_type=image.tipo, status=status.HTTP_200_OK)
