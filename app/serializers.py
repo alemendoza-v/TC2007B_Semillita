@@ -4,7 +4,7 @@ from rest_framework import serializers
 class UsoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Uso
-        fields = ['nombre']
+        fields = ['id', 'nombre']
 
 class ImagenSerializer(serializers.ModelSerializer):
     class Meta:
