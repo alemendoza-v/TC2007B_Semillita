@@ -18,14 +18,19 @@ from django.urls import include, path
 from rest_framework import routers
 from app import views
 
+# Creating a router object that will be used to register the viewsets.
 router = routers.DefaultRouter()
+# Registering the viewsets with the router.
 router.register(r'plantas', views.PlantaViewSet, basename='plantas')
 router.register(r'imagenes', views.ImagenViewSet, basename='imagenes')
 router.register(r'analiticos', views.AnaliticosViewSet, basename='analiticos')
 router.register(r'usos', views.UsosViewSet, basename='usos')
 
 urlpatterns = [
+    # The default admin page.
     path('admin/', admin.site.urls),
+    # Including the urls from the router object.
     path('api/', include(router.urls)),
+    # The default login page for the API.
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
