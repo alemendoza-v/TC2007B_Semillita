@@ -1,7 +1,10 @@
+from multiprocessing import context
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from app.models import Planta, Imagen
+from django.core import serializers
+
+from app.models import Planta, Imagen, Analiticos
 from app.serializers import PlantaSerializer, ImagenSerializer
 
 from django.shortcuts import get_object_or_404
@@ -68,3 +71,20 @@ class ImagenViewSet(viewsets.ModelViewSet):
         image = get_object_or_404(Imagen, pk=pk)
         
         return Response(image.dato, content_type=image.tipo, status=status.HTTP_200_OK)
+
+class AnaliticosViewSet(viewsets.ViewSet):
+
+    def list(self, response):
+        plant_list = []
+
+        for plant in Planta.objects.all():
+            temp_plant_dict = {}
+            temp_plant_dict['id'] = plant.id
+            temp_plant_dict['count'] = Analiticos.objects.all().filter(planta_id=plant.id).count()
+            plant_list.append(temp_plant_dict)
+
+        popularPlantID = max(plant_list, key=lambda x: x['count'])
+        popularPlant = Planta.objects.all().filter(id=popularPlantID['id']).first()
+        serialized_popularPlant = PlantaSerializer(popularPlant)
+
+        return Response(serialized_popularPlant.data)
