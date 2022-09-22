@@ -21,5 +21,5 @@ class PlantaSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'nombre_cientifico', 'nombre_tradicional', 'especie', 
             'origen', 'temporada', 'estatus', 'descripcion', 
-            'fertilizante', 'riego', 'iluminacion', 'usos', 'Pimagenes'
+            'fertilizante', 'riego', 'iluminacion', 'usos', 'Pimagenes',
             ]
