@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from app.models import Planta, Imagen
 from app.serializers import PlantaSerializer, ImagenSerializer
 
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 import base64
+
 class PlantaViewSet(viewsets.ModelViewSet):
     serializer_class = PlantaSerializer
 
@@ -14,7 +14,7 @@ class PlantaViewSet(viewsets.ModelViewSet):
         queryset = Planta.objects.all().filter(estatus=True).order_by('id')
         return queryset
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request):
         data = request.data
         try:
             new_plant = Planta.objects.create(
@@ -64,7 +64,7 @@ class ImagenViewSet(viewsets.ModelViewSet):
         serializer = ImagenSerializer(new_image, context=serializer_context)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, pk=None):
         image = get_object_or_404(Imagen, pk=pk)
         
         return Response(image.dato, content_type=image.tipo, status=status.HTTP_200_OK)
