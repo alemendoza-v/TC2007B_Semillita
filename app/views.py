@@ -43,6 +43,12 @@ class PlantaViewSet(viewsets.ModelViewSet):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    def destroy(self, request, *args, **kwargs):
+        planta = self.get_object()
+        planta.estatus = False
+        planta.save()
+        return Response("Cambio el estado de la planta " + planta.nombre_cientifico + "a falso", status=status.HTTP_204_NO_CONTENT)
+
 class ImagenViewSet(viewsets.ModelViewSet):
     serializer_class = ImagenSerializer
 
