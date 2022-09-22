@@ -1,12 +1,13 @@
 from django.db import models
 
-# Create your models here.
+# It creates a class called Uso.
 class Uso(models.Model):
     nombre = models.TextField()
 
     def __str__(self):
         return self.nombre
 
+# It creates a class called Planta.
 class Planta(models.Model):
     nombre_cientifico = models.TextField()
     nombre_tradicional = models.TextField()
@@ -21,9 +22,11 @@ class Planta(models.Model):
 
     usos = models.ManyToManyField(Uso)
 
+# It creates a class called Seccion.
 class Seccion(models.Model):
     descripcion = models.TextField()
 
+# It creates a class called Imagen.
 class Imagen(models.Model):
     dato = models.TextField()
     tipo = models.CharField(max_length=256, help_text='The MIMEType of the file')
@@ -32,6 +35,7 @@ class Imagen(models.Model):
 
     def __str__(self) -> str:
         return self.tipo
+# It creates a class called Analiticos.
 class Analiticos(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     planta = models.ForeignKey(Planta, on_delete=models.CASCADE)
