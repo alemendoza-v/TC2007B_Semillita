@@ -20,6 +20,7 @@ from app import views
 
 router = routers.DefaultRouter()
 router.register(r'plantas', views.PlantaViewSet, basename='plantas')
+router.register(r'imagenes', views.ImagenViewSet, basename='imagenes')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

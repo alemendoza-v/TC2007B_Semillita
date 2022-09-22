@@ -1,10 +1,10 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from app.models import Planta, Imagen
+from app.serializers import PlantaSerializer, ImagenSerializer
 
-from app.models import Planta
-from app.serializers import PlantaSerializer
+from forms import ImagenForm
 
 class PlantaViewSet(viewsets.ModelViewSet):
     serializer_class = PlantaSerializer
@@ -13,7 +13,6 @@ class PlantaViewSet(viewsets.ModelViewSet):
         queryset = Planta.objects.all().filter(estatus=True).order_by('id')
         return queryset
 
-    #@action(detail=False, methods=['post'], url_path='create')
     def create(self, request, *args, **kwargs):
         data = request.data
         try:
@@ -37,5 +36,23 @@ class PlantaViewSet(viewsets.ModelViewSet):
             serializer = PlantaSerializer(new_plant, context=serializer_context)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class ImagenViewSet(viewsets.ModelViewSet):
+    serializer_class = ImagenSerializer
+
+    def get_queryset(self):
+        queryset = Imagen.objects.all().order_by('id')
+        return queryset
+
+    def create(self, request):
+        imagen_form = ImagenForm(request.POST, request.FILES)
+        if imagen_form.is_valid():
+            imagen = imagen_form.save()
+            serializer_context = {
+                'request': request,
+            }
+            return Response(self.serializer_class(imagen).data, status=status.HTTP_201_CREATED)
+        else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
