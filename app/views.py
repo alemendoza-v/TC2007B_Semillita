@@ -1,14 +1,15 @@
-from multiprocessing import context
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from django.core import serializers
-
-from app.models import Planta, Imagen, Analiticos
-from app.serializers import PlantaSerializer, ImagenSerializer
+from app.models import Planta, Imagen, Analiticos, Uso
+from app.serializers import PlantaSerializer, ImagenSerializer, UsoSerializer
 
 from django.shortcuts import get_object_or_404
 import base64
+
+class UsosViewSet(viewsets.ModelViewSet):
+    queryset = Uso.objects.all()
+    serializer_class = UsoSerializer
 
 class PlantaViewSet(viewsets.ModelViewSet):
     serializer_class = PlantaSerializer
