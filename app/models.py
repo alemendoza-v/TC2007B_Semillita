@@ -4,6 +4,9 @@ from django.db import models
 class Uso(models.Model):
     nombre = models.TextField()
 
+    def __str__(self):
+        return self.nombre
+
 class Planta(models.Model):
     nombre_cientifico = models.TextField()
     nombre_tradicional = models.TextField()

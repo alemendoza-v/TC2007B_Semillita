@@ -14,10 +14,12 @@ class ImagenSerializer(serializers.ModelSerializer):
         fields = ['dato', 'tipo']
 
 class PlantaSerializer(serializers.ModelSerializer):
+    usos = serializers.StringRelatedField(many=True)
+    Pimagenes = ImagenSerializer(many=True, read_only=True)
     class Meta:
         model = Planta
         fields = [
-            'nombre_cientifico', 'nombre_tradicional', 'especie', 
+            'id', 'nombre_cientifico', 'nombre_tradicional', 'especie', 
             'origen', 'temporada', 'estatus', 'descripcion', 
-            'fertilizante', 'riego', 'iluminacion', 'usos'
+            'fertilizante', 'riego', 'iluminacion', 'usos', 'Pimagenes'
             ]
