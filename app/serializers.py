@@ -11,7 +11,7 @@ class UsoSerializer(serializers.ModelSerializer):
 class ImagenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Imagen
-        fields = ['dato', 'tipo']
+        fields = ['id', 'dato', 'tipo']
 
 class PlantaSerializer(serializers.ModelSerializer):
     usos = serializers.StringRelatedField(many=True)

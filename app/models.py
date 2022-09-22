@@ -27,8 +27,8 @@ class Seccion(models.Model):
 class Imagen(models.Model):
     dato = models.TextField()
     tipo = models.CharField(max_length=256, help_text='The MIMEType of the file')
-    planta = models.ForeignKey(Planta, on_delete=models.CASCADE, null=True)
-    seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE, null=True)
+    planta = models.ForeignKey(Planta, related_name='Pimagenes', on_delete=models.CASCADE, null=True)
+    seccion = models.ForeignKey(Seccion, related_name='Simagenes', on_delete=models.CASCADE, null=True)
 
     def __str__(self) -> str:
         return self.tipo
