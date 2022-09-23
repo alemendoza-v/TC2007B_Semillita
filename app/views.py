@@ -160,7 +160,7 @@ class UserLogInView(APIView):
             user = authenticate(username=username, password=password)
 
             content = {
-                'user': user.get_username(),  # `django.contrib.auth.User` instance.
+                'Usuario': user.first_name,  # `django.contrib.auth.User` instance.
             }
             return Response(content, status=status.HTTP_200_OK)
         except:
