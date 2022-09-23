@@ -1,6 +1,11 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from app.models import Planta, Imagen, Analiticos, Uso
 from app.serializers import PlantaSerializer, ImagenSerializer, UsoSerializer
 
@@ -146,3 +151,17 @@ class AnaliticosViewSet(viewsets.ViewSet):
         popularPlantsSerialized = [PlantaSerializer(plant).data for plant in Planta.objects.filter(id__in=popularPlantsSortedIDs)]
 
         return Response(popularPlantsSerialized, status=status.HTTP_200_OK)
+
+class UserLogInView(APIView):
+    def post(self, request, format=None):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        try:
+            user = authenticate(username=username, password=password)
+
+            content = {
+                'user': user.get_username(),  # `django.contrib.auth.User` instance.
+            }
+            return Response(content, status=status.HTTP_200_OK)
+        except:
+            return Response("Usuario no encontrado o contraseña equivocada", status=status.HTTP_400_BAD_REQUEST)
