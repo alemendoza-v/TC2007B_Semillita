@@ -60,6 +60,8 @@ class PlantaViewSet(viewsets.ModelViewSet):
                 iluminacion=data['iluminacion'],
             )
             new_plant.save()
+            # It's iterating through the usos array in the request data, and then it's adding each uso
+            # to the plant object.
             for u in data['usos']:
                 uso = Uso.objects.get(id=u)
                 new_plant.usos.add(uso)
@@ -68,7 +70,7 @@ class PlantaViewSet(viewsets.ModelViewSet):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, *args, **kwargs):
+    def destroy(self):
         """
         It takes a request, and returns a response
         
@@ -76,6 +78,7 @@ class PlantaViewSet(viewsets.ModelViewSet):
         :return: The response is a string with the name of the plant and the status of the plant.
         """
         planta = self.get_object()
+        # It's changing the estatus attribute of the plant object to False.
         planta.estatus = False
         planta.save()
         return Response("Cambio el estado de la planta " + planta.nombre_cientifico + "a falso", status=status.HTTP_204_NO_CONTENT)
@@ -131,7 +134,7 @@ class ImagenViewSet(viewsets.ModelViewSet):
 # Analiticos model.
 class AnaliticosViewSet(viewsets.ViewSet):
 
-    def list(self, response):
+    def list(self):
         """
         I'm getting the top 3 plants with the most number of Analiticos objects associated with them
         
@@ -146,21 +149,29 @@ class AnaliticosViewSet(viewsets.ViewSet):
             temp_plant_dict['count'] = Analiticos.objects.all().filter(planta_id=plant.id).count()
             plant_list.append(temp_plant_dict)
 
+        # It's getting the top 3 plants with the most number of Analiticos objects associated with
+        # them.
         popularPlantsSortedIDs = [plant['id'] for plant in sorted(plant_list, key=lambda x: x['count'], reverse=True)[0:3]]
+        # We serualize the data and return it as a response.
         popularPlantsSerialized = [PlantaSerializer(plant).data for plant in Planta.objects.filter(id__in=popularPlantsSortedIDs)]
 
         return Response(popularPlantsSerialized, status=status.HTTP_200_OK)
 
+# This class is a subclass of the APIView class, and it's purpose is to handle the user login process
 class UserLogInView(APIView):
-    def post(self, request, format=None):
-        username = request.data.get("username")
-        password = request.data.get("password")
+    def post(self, request):
+        """
+        If the user is authenticated, return the user's first name. Otherwise, return an error message
+        
+        :param request: The request object
+        :return: The user's first name.
+        """
+        username = request.data[0]
+        password = request.data[1]
         try:
+            # It's authenticating the user.
             user = authenticate(username=username, password=password)
-
-            content = {
-                'Usuario': user.first_name,  # `django.contrib.auth.User` instance.
-            }
-            return Response(content, status=status.HTTP_200_OK)
+            if user is not None:
+                return Response("Usuario autenticado", status=status.HTTP_200_OK)
         except:
             return Response("Usuario no encontrado o contraseña equivocada", status=status.HTTP_400_BAD_REQUEST)

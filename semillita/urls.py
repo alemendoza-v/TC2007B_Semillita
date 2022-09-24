@@ -33,5 +33,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     # The default login page for the API.
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # A custom login view.
     path('api/users/', views.UserLogInView.as_view()),
 ]
