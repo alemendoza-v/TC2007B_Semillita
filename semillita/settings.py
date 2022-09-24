@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import django_heroku
+import sys
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -96,26 +97,31 @@ DATABASES = {
     }
 }
 """
-
-DATABASES = {
-
-    'default': {
-
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        'NAME': 'dfvptvl55qrane',
-
-        'USER': 'ucfcfnmlmklvze',
-
-        'PASSWORD': '36f17b2f1134b7afcb083362b178f695558dfd90b107b2fe8600da4de5481501',
-
-        'HOST': 'ec2-3-223-169-166.compute-1.amazonaws.com',
-
-        'PORT': '5432',
-
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
     }
+else:
+    DATABASES = {
 
-}
+        'default': {
+
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+            'NAME': 'dfvptvl55qrane',
+
+            'USER': 'ucfcfnmlmklvze',
+
+            'PASSWORD': '36f17b2f1134b7afcb083362b178f695558dfd90b107b2fe8600da4de5481501',
+
+            'HOST': 'ec2-3-223-169-166.compute-1.amazonaws.com',
+
+            'PORT': '5432',
+        }
+    }
 
 
 # Password validation
