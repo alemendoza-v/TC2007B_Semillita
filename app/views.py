@@ -1,3 +1,4 @@
+from dataclasses import fields
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,7 +9,12 @@ from app.serializers import PlantaSerializer, ImagenSerializer, UsoSerializer
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.views.generic.detail import DetailView
+from django.urls import reverse
+
 import base64
+import qrcode
+from io import BytesIO
 
 # This class is a viewset that allows us to create, retrieve, update, and delete Usos objects.
 class UsosViewSet(viewsets.ModelViewSet):
@@ -18,6 +24,7 @@ class UsosViewSet(viewsets.ModelViewSet):
 # This class is a viewset that allows you to create, retrieve, update, and delete plants
 class PlantaViewSet(viewsets.ModelViewSet):
     serializer_class = PlantaSerializer
+    lookup_field = 'id'
 
     def get_queryset(self):
         """
@@ -191,3 +198,29 @@ class UserLogInView(APIView):
                 return Response("Usuario autenticado", status=status.HTTP_200_OK)
         except:
             return Response("Usuario no encontrado o contraseña equivocada", status=status.HTTP_400_BAD_REQUEST)
+
+class CreateQR(APIView):
+    def get(self, request):
+        try:
+            data = request.data
+            plant = get_object_or_404(Planta, pk=data['planta_id'])
+            # qrData = "http://127.0.0.1:8080" + reverse('planta_detail', args=[plant.id])
+            qrData = "https://tc2007b-semillita.herokuapp.com" + reverse('planta_detail', args=[plant.id])
+            img = qrcode.make(qrData)
+
+            with BytesIO() as f:
+                img.save(f, format='PNG')
+                img_decoded = base64.b64encode(f.getvalue()).decode('ascii')
+                return Response(img_decoded, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class PlantaDetailView(DetailView):
+    model = Planta
+    exclude = ['id', 'descripcion', 'created_at', 'updated_at']
+    template_name = 'planta_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['plant'] = self.get_object()
+        return context

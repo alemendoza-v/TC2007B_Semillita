@@ -9,6 +9,7 @@ psycopg2 = "*"
 django-heroku = "*"
 gunicorn = "*"
 djangorestframework = "*"
+qrcode = {extras = ["pil"], version = "*"}
 
 [dev-packages]
 
