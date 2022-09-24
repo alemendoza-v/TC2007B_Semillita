@@ -35,4 +35,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     # A custom login view.
     path('api/users/', views.UserLogInView.as_view()),
+    path('api/qr/', views.CreateQR.as_view()),
+    path('plantas/<int:pk>/', views.PlantaDetailView.as_view(), name='planta_detail'),
 ]
