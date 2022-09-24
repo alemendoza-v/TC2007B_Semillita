@@ -60,12 +60,11 @@ class PlantaViewSet(viewsets.ModelViewSet):
                 iluminacion=data['iluminacion'],
             )
             new_plant.save()
-            new_plant.usos.add(data['usos'])
-            serializer_context = {
-                'request': request,
-            }
-            serializer = PlantaSerializer(new_plant, context=serializer_context)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            for u in data['usos']:
+                uso = Uso.objects.get(id=u)
+                new_plant.usos.add(uso)
+            new_plant.save()
+            return Response("Planta creada", status=status.HTTP_201_CREATED)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
