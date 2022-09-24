@@ -202,8 +202,8 @@ class UserLogInView(APIView):
 class CreateQR(APIView):
     def get(self, request):
         try:
-            data = request.data
-            plant = get_object_or_404(Planta, pk=data['planta_id'])
+            data = request.GET['planta_id']
+            plant = get_object_or_404(Planta, pk=data)
             # qrData = "http://127.0.0.1:8080" + reverse('planta_detail', args=[plant.id])
             qrData = "https://tc2007b-semillita.herokuapp.com" + reverse('planta_detail', args=[plant.id])
             img = qrcode.make(qrData)
