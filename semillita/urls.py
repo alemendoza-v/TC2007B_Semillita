@@ -37,4 +37,5 @@ urlpatterns = [
     path('api/users/', views.UserLogInView.as_view()),
     path('api/qr/', views.CreateQR.as_view()),
     path('plantas/<int:pk>/', views.PlantaDetailView.as_view(), name='planta_detail'),
+    path('api/planta/<str:nombre_tradicional>/', views.PlantaGetView.as_view()),
 ]

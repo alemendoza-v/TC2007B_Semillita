@@ -1,7 +1,7 @@
-from dataclasses import fields
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 
 from django.contrib.auth import authenticate
 from app.models import Planta, Imagen, Analiticos, Uso
@@ -224,3 +224,12 @@ class PlantaDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['plant'] = self.get_object()
         return context
+
+class PlantaGetView(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            plant = get_object_or_404(Planta, nombre_tradicional=kwargs['nombre_tradicional'])
+            serializer = PlantaSerializer(plant)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
