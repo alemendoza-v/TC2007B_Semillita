@@ -77,7 +77,7 @@ class PlantaViewSet(viewsets.ModelViewSet):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, pk=None, format=None):
+    def destroy(self, request, *args, **kwargs):
         """
         It takes a request, and returns a response
         
@@ -85,7 +85,7 @@ class PlantaViewSet(viewsets.ModelViewSet):
         :return: The response is a string with the name of the plant and the status of the plant.
         """
         try:
-            planta = get_object_or_404(Planta, pk=pk)
+            planta = get_object_or_404(Planta, pk=kwargs['id'])
             # It's changing the estatus attribute of the plant object to False.
             planta.estatus = False
             planta.save()
