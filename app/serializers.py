@@ -11,7 +11,7 @@ class UsoSerializer(serializers.ModelSerializer):
 class ImagenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Imagen
-        fields = ['id', 'dato', 'tipo']
+        fields = ['id', 'dato', 'tipo', 'planta_id']
 
 # A serializer class that will be used to serialize the data from the model.
 class PlantaSerializer(serializers.ModelSerializer):
