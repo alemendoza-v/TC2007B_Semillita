@@ -1,3 +1,4 @@
+from multiprocessing import context
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -73,7 +74,11 @@ class PlantaViewSet(viewsets.ModelViewSet):
                 uso = Uso.objects.get(id=u)
                 new_plant.usos.add(uso)
             new_plant.save()
-            return HttpResponse("Planta creada", status=status.HTTP_201_CREATED)
+            context = {
+                'request': request,
+            }
+            serializer = PlantaSerializer(new_plant, context=context)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
