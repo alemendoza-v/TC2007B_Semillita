@@ -97,6 +97,17 @@ class PlantaViewSet(viewsets.ModelViewSet):
             return Response("Cambio el estado de la planta " + planta.nombre_cientifico + "a falso", status=status.HTTP_204_NO_CONTENT)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            planta = get_object_or_404(Planta, pk=kwargs['id'])
+            context = {
+                'request': request,
+            }
+            serializer = PlantaSerializer(planta, context=context)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
             
 # This class is a viewset that allows you to create, retrieve, update, and delete images
 class ImagenViewSet(viewsets.ModelViewSet):
