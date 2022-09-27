@@ -237,8 +237,10 @@ class PlantaDetailView(DetailView):
     template_name = 'planta_detail.html'
 
     def get_context_data(self, **kwargs):
+        # Create analiticos registry
         context = super().get_context_data(**kwargs)
-        context['plant'] = self.get_object()
+        context['usos'] = list(context['object'].usos.all())
+        context['imagen'] = str(context['object'].Pimagenes.all()[0].dato)
         return context
 
 class PlantaGetView(APIView):
