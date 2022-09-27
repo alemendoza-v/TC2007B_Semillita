@@ -7,13 +7,13 @@ class UsoSerializer(serializers.ModelSerializer):
         model = Uso
         fields = ['id', 'nombre']
 
-# A serializer class that will be used to serialize the model.
+# A serializer class that will be used to serialize the Imagen model.
 class ImagenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Imagen
         fields = ['id', 'dato', 'tipo', 'planta_id']
 
-# A serializer class that will be used to serialize the data from the model.
+# A serializer class that will be used to serialize the planta model.
 class PlantaSerializer(serializers.ModelSerializer):
     # A shortcut for a read-only field that returns the string representation of the objects.
     usos = serializers.StringRelatedField(many=True)

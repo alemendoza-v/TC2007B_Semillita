@@ -1,15 +1,12 @@
-from multiprocessing import context
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.decorators import action
 
 from django.contrib.auth import authenticate
 from app.models import Planta, Imagen, Analiticos, Uso
 from app.serializers import PlantaSerializer, ImagenSerializer, UsoSerializer
 
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
 from django.views.generic.detail import DetailView
 from django.urls import reverse
 
@@ -37,24 +34,14 @@ class PlantaViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         """
-        It creates a new plant object with the data provided in the request, and then it adds the usos
-        to the plant object.
+        It creates a new plant.
         
-        :param request: The request object
-        :return: <code>{
-            "nombre_cientifico": "",
-            "nombre_tradicional": "",
-            "especie": "",
-            "origen": "",
-            "temporada": "",
-            "estatus": true,
-            "descripcion": "",
-            "fertilizante": "",
-            "riego": "",
-            "iluminacion": "",
+        :param request: The request plant object
+        :return: The created plant object.
         """
         data = request.data
         try:
+            # It's creating a new plant object.
             new_plant = Planta.objects.create(
                 nombre_cientifico=data['nombre_cientifico'],
                 nombre_tradicional=data['nombre_tradicional'],
@@ -68,12 +55,12 @@ class PlantaViewSet(viewsets.ModelViewSet):
                 iluminacion=data['iluminacion'],
             )
             new_plant.save()
-            # It's iterating through the usos array in the request data, and then it's adding each uso
-            # to the plant object.
+            # It's adding the usos to the plant object.
             for u in data['usos']:
                 uso = Uso.objects.get(id=u)
                 new_plant.usos.add(uso)
             new_plant.save()
+            # It's serializing the new_plant object and returning it as a response.
             context = {
                 'request': request,
             }
@@ -84,10 +71,10 @@ class PlantaViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         """
-        It takes a request, and returns a response
+        It's changing the estatus attribute of the plant object to False
         
-        :param request: The request object
-        :return: The response is a string with the name of the plant and the status of the plant.
+        :param request: The request plant object id
+        :return: It's returning a Response object with the status code 204.
         """
         try:
             planta = get_object_or_404(Planta, pk=kwargs['id'])
@@ -99,6 +86,12 @@ class PlantaViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, *args, **kwargs):
+        """
+        It takes a request, and returns a response
+        
+        :param request: The request plant object
+        :return: The retrieved plant object.
+        """
         try:
             planta = get_object_or_404(Planta, pk=kwargs['id'])
             context = {
@@ -125,8 +118,8 @@ class ImagenViewSet(viewsets.ModelViewSet):
         """
         I'm trying to create a new image object, and then assign it to a plant object
         
-        :param request: The request object
-        :return: The image is being returned as a base64 string.
+        :param request: The request image object
+        :return: The created image object
         """
         try:
             data = request.data
@@ -173,7 +166,7 @@ class AnaliticosViewSet(viewsets.ViewSet):
         :param response: The response object that will be returned to the client
         :return: A list of dictionaries.
         """
-        if Analiticos.objects.all().count() > 0:
+        if Analiticos.objects.all().count() > 0: # If there are any Analiticos objects in the database
             try:
                 plant_list = []
 
@@ -193,34 +186,36 @@ class AnaliticosViewSet(viewsets.ViewSet):
 
             except:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
-        else:
+        else: # If there are no Analiticos objects in the database
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-# This class is a subclass of the APIView class, and it's purpose is to handle the user login process
+# This class is used to log in users
 class UserLogInView(APIView):
     def post(self, request):
         """
         If the user is authenticated, return the user's first name. Otherwise, return an error message
         
         :param request: The request object
-        :return: The user's first name.
+        :return: Text that tells the user if they were authenticated or not.
         """
         try:
             username = request.data['username']
             password = request.data['password']
             # It's authenticating the user.
             user = authenticate(username=username, password=password)
-            if user is not None:
+            if user is not None: # If the user is authenticated
                 return Response("Usuario autenticado", status=status.HTTP_200_OK)
-        except:
+        except: # If the user is not authenticated
             return Response("Usuario no encontrado o contraseña equivocada", status=status.HTTP_400_BAD_REQUEST)
 
+# This class is used to create qr codes
 class CreateQR(APIView):
+    # It takes a plant id, creates a QR code with the url of the plant detail page, and returns the QR
+    # code as a base64 encoded string
     def get(self, request):
         try:
             data = request.GET['planta_id']
             plant = get_object_or_404(Planta, pk=data)
-            # qrData = "http://127.0.0.1:8080" + reverse('planta_detail', args=[plant.id])
             qrData = "https://tc2007b-semillita.herokuapp.com" + reverse('planta_detail', args=[plant.id])
             img = qrcode.make(qrData)
 
@@ -231,8 +226,14 @@ class CreateQR(APIView):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+# This class is used to send information to the plant detail page
 class PlantaDetailView(DetailView):
     model = Planta
+    """
+    It takes the context data from the parent class, adds the usos and imagen data to it, and returns
+    the new context data
+    :return: The context is a dictionary that contains the data that is used to render the template.
+    """
     exclude = ['id', 'descripcion', 'created_at', 'updated_at']
     template_name = 'planta_detail.html'
 
@@ -243,8 +244,16 @@ class PlantaDetailView(DetailView):
         context['imagen'] = str(context['object'].Pimagenes.all()[0].dato)
         return context
 
+# This class is used to get data of a single plant using its traditional name
 class PlantaGetView(APIView):
     def get(self, request, *args, **kwargs):
+        """
+        It gets the plant with the name passed in the url, and if it exists, it returns the plant's data in
+        JSON format
+        
+        :param request: The request object
+        :return: The plant object in JSON format
+        """
         try:
             plant = get_object_or_404(Planta, nombre_tradicional=kwargs['nombre_tradicional'])
             serializer = PlantaSerializer(plant)
