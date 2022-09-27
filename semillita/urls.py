@@ -35,7 +35,10 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     # A custom login view.
     path('api/users/', views.UserLogInView.as_view()),
+    # API for QR Code creation.
     path('api/qr/', views.CreateQR.as_view()),
+    # The view for a plant.
     path('plantas/<int:pk>/', views.PlantaDetailView.as_view(), name='planta_detail'),
+    # API to get a plant by its tradicional name.
     path('api/planta/<str:nombre_tradicional>/', views.PlantaGetView.as_view()),
 ]
