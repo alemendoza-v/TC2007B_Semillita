@@ -1,0 +1,29 @@
+body {
+    background-color: #FFF5D0;
+}
+.vista{
+    background-color: white;
+    width: 88vw;
+    height: fit-content;
+    padding-left:  2vw;
+    padding-right:  2vw;
+    padding-top: 2em;
+    border-radius: 2.5%;
+}
+
+.cuadroImagen{
+    width: 75vw;
+    height: 75vw;
+    border-radius: 10%;
+    background-color: #E9F2FF;
+}
+
+.imagenP{
+    height: 70vw;
+    width: 70vw;
+}
+
+.espaciochico{
+    height: 0.4em;
+}
+
