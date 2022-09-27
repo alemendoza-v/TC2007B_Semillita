@@ -1,13 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/vistaPlanta.css">
+    <link rel="stylesheet" href="../static/css/textos.css">
     <title>Planta</title>
+
 </head>
+
 <body>
-    <p>{{ object.nombre_cientifico }}</p>
-    <p>{{ object.nombre_tradicional }}</p>
+    <center><div class="vista">
+        
+        <div>
+            <div class = "titulo" id = "nombre"> Planta Nombre</div>
+        </div>
+        
+        <div class = "espaciochico"></div>
+        <div class = "espaciochico"></div>
+
+        <div>
+            <div class="cuadroImagen">
+                <img class = "imagenP" src = "https://o.remove.bg/downloads/8b4877b3-833d-4ddd-8478-7a3bc3b2ff72/161-1613653_tubes-plante-verte-potted-plant-transparent-background-removebg-preview.png">
+            </div>
+        </div>
+
+        <div class = "espaciochico"></div><div class = "espaciochico"></div>
+        
+        <div>
+            <div class = "subNombre" id = "subNombre">Planta Subnombre</div>
+            <div class = "espaciochico"></div>
+            <div class="descripcion">
+                Planta Stuff Planta Stuff Planta Planta Planta Stuff Stuff Planta Planta Planta Planta Stuff Planta  Stuff Planta Planta Planta Planta Planta Planta Planta Planta Planta Planta Planta Stuff - Stuff Stuff
+            </div>
+        </div>
+        <div class = "espaciochico"></div>
+
+        <div>
+            <div class = "subNombre" id = "origen">Origen</div>
+            <div class = "espaciochico"></div>
+            Planta Stuff Planta Stuff Planta Planta Planta Stuff Stuff Planta Planta Planta Planta Stuff Planta  Stuff Planta Planta Planta Planta Planta Planta Planta Planta Planta Planta Planta Stuff - Stuff Stuff
+        </div>
+        <div class = "espaciochico"></div>
+           
+
+        <div>
+            <div class = "subNombre" id = "usos">Usos</div>
+            <div class = "espaciochico"></div>
+            <div class="lista" >
+            <ul>
+               {% for uso in object.usos% }
+               <li>{{uso}}</li>
+               {% endfor%}
+            </ul>    
+            </div>  
+        </div>
+        <div class = "espaciochico"></div>
+           
+        <div>
+            <div class = "subNombre" id = "cuidados">Cuidados</div>
+            <div class = "espaciochico"></div>
+            Planta Stuff Planta Stuff Planta Planta Planta Stuff Stuff Planta Planta Planta Planta Stuff Planta  Stuff Planta Planta Planta Planta Planta Planta Planta Planta Planta Planta Planta Stuff - Stuff Stuff
+        </div>
+        <br>
+
+    </div></center>
+
+
 </body>
 </html>

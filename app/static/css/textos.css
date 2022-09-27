@@ -1,0 +1,28 @@
+.titulo{
+    font-size: 1.7em;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: #A47A71;
+    font-weight: 550;
+}
+
+.subNombre{
+    font-size: 1.3em;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: #A47A71;
+    font-weight: bold;
+}
+
+.navegacion{
+    font-size: 1em;
+    color: #5AAAC1;
+
+}
+
+.descripcion{
+    font-size: 1em;
+    
+}
+
+.lista{
+    text-align: left;
+}
