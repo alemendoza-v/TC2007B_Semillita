@@ -1,15 +1,21 @@
+from fileinput import filename
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from django.contrib.auth import authenticate
 from app.models import Planta, Imagen, Analiticos, Uso
 from app.serializers import PlantaSerializer, ImagenSerializer, UsoSerializer
 
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from django.views.generic.detail import DetailView
 from django.urls import reverse
 
+import os
+import smtplib
+from email.message import EmailMessage
+from PIL import Image
 import base64
 import qrcode
 from io import BytesIO
@@ -223,6 +229,33 @@ class CreateQR(APIView):
                 img.save(f, format='PNG')
                 img_decoded = base64.b64encode(f.getvalue()).decode('ascii')
                 return Response(img_decoded, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    def post(self, request):
+        try:
+            image = request.FILES.get('dato').read()
+            image_encoded = base64.b64encode(image).decode('ascii')
+
+            sender_email = os.getenv('EMAIL_USER')
+            receiver_email = User.objects.get(first_name= 'Alejandro').email
+            subject = "Codigo QR para la planta " + request.data['nombre_tradicional']
+
+            new_email = EmailMessage()
+            new_email['Subject'] = subject
+            new_email['From'] = sender_email
+            new_email['To'] = receiver_email
+
+            img = Image.open(BytesIO(base64.b64decode(image_encoded)))
+
+            new_email.add_attachment(img, maintype='image', subtype='png', filename=request.data['nombre_cientifico'] + '.png')
+
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+                smtp.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASS'))
+                smtp.send_message(new_email)
+                
+            return Response(status=status.HTTP_200_OK)
+
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
