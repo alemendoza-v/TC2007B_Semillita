@@ -235,7 +235,6 @@ class CreateQR(APIView):
     def post(self, request):
         try:
             image = request.FILES.get('dato').read()
-            image_encoded = base64.b64encode(image).decode('ascii')
 
             sender_email = os.getenv('EMAIL_USER')
             receiver_email = User.objects.get(first_name= 'Alejandro').email
@@ -246,9 +245,7 @@ class CreateQR(APIView):
             new_email['From'] = sender_email
             new_email['To'] = receiver_email
 
-            img = Image.open(BytesIO(base64.b64decode(image_encoded)))
-
-            new_email.add_attachment(img, maintype='image', subtype='png', filename=request.data['nombre_cientifico'] + '.png')
+            new_email.add_attachment(image, maintype='image', subtype='png', filename=request.data['nombre_tradicional'] + '.png')
 
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
                 smtp.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASS'))
