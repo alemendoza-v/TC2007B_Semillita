@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import django_heroku
 import sys
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,13 +47,22 @@ INSTALLED_APPS = [
 
     # Django Imports
     'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 # Pagination Settings
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 15
 }
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

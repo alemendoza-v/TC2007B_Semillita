@@ -11,6 +11,7 @@ gunicorn = "*"
 djangorestframework = "*"
 qrcode = {extras = ["pil"], version = "*"}
 matplotlib = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
