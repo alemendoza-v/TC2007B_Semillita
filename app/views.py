@@ -19,6 +19,10 @@ import base64
 import qrcode
 from io import BytesIO
 
+import matplotlib.pyplot as plt; plt.rcdefaults()
+import numpy as np
+from matplotlib.backends.backend_pdf import PdfPages
+
 # This class is a viewset that allows us to create, retrieve, update, and delete Usos objects.
 class UsosViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -181,8 +185,22 @@ class AnaliticosViewSet(viewsets.ViewSet):
                 for plant in Planta.objects.all():
                     temp_plant_dict = {}
                     temp_plant_dict['id'] = plant.id
+                    temp_plant_dict['name'] = plant.nombre_tradicional
                     temp_plant_dict['count'] = Analiticos.objects.all().filter(planta_id=plant.id).count()
                     plant_list.append(temp_plant_dict)
+
+                y_pos = np.arange(len(plant_list))
+                names = [dic["name"] for dic in plant_list]
+                performance = [dic["count"] for dic in plant_list]
+
+                plt.bar(y_pos, performance, align='center', alpha=0.5)
+                plt.xticks(y_pos, names)
+                plt.ylabel('Visitas')
+                plt.title('Visitas por planta') 
+
+                buffer = BytesIO()
+                plt.savefig(buffer, format='png')
+                buffer.seek(0)                
 
                 # It's getting the top 3 plants with the most number of Analiticos objects associated with
                 # them.
@@ -190,7 +208,12 @@ class AnaliticosViewSet(viewsets.ViewSet):
                 # We serualize the data and return it as a response.
                 popularPlantsSerialized = [PlantaSerializer(plant).data for plant in Planta.objects.filter(id__in=popularPlantsSortedIDs)]
 
-                return Response(popularPlantsSerialized, status=status.HTTP_200_OK)
+                response = {
+                    'popularPlants': popularPlantsSerialized,
+                    'graph': base64.b64encode(buffer.read()).decode('ascii')
+                } 
+
+                return Response(response, status=status.HTTP_200_OK)
 
             except:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
