@@ -1,7 +1,7 @@
-from fileinput import filename
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 from app.models import Planta, Imagen, Analiticos, Uso
 from app.serializers import PlantaSerializer, ImagenSerializer, UsoSerializer
@@ -15,18 +15,19 @@ from django.urls import reverse
 import os
 import smtplib
 from email.message import EmailMessage
-from PIL import Image
 import base64
 import qrcode
 from io import BytesIO
 
 # This class is a viewset that allows us to create, retrieve, update, and delete Usos objects.
 class UsosViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Uso.objects.all().order_by('nombre')
     serializer_class = UsoSerializer
 
 # This class is a viewset that allows you to create, retrieve, update, and delete plants
 class PlantaViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = PlantaSerializer
     lookup_field = 'id'
 
@@ -110,6 +111,7 @@ class PlantaViewSet(viewsets.ModelViewSet):
             
 # This class is a viewset that allows you to create, retrieve, update, and delete images
 class ImagenViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = ImagenSerializer
 
     def get_queryset(self):
@@ -164,7 +166,7 @@ class ImagenViewSet(viewsets.ModelViewSet):
 # This class is a viewset that allows you to create, retrieve, update, and delete instances of the
 # Analiticos model.
 class AnaliticosViewSet(viewsets.ViewSet):
-
+    permission_classes = [IsAuthenticated]
     def list(self, request):
         """
         I'm getting the top 3 plants with the most number of Analiticos objects associated with them
@@ -195,15 +197,16 @@ class AnaliticosViewSet(viewsets.ViewSet):
         else: # If there are no Analiticos objects in the database
             return Response(status=status.HTTP_204_NO_CONTENT)
 
+"""
 # This class is used to log in users
 class UserLogInView(APIView):
     def post(self, request):
-        """
+        
         If the user is authenticated, return the user's first name. Otherwise, return an error message
         
         :param request: The request object
         :return: Text that tells the user if they were authenticated or not.
-        """
+        
         try:
             username = request.data['username']
             password = request.data['password']
@@ -213,9 +216,12 @@ class UserLogInView(APIView):
                 return Response("Usuario autenticado", status=status.HTTP_200_OK)
         except: # If the user is not authenticated
             return Response("Usuario no encontrado o contraseña equivocada", status=status.HTTP_400_BAD_REQUEST)
+"""
+
 
 # This class is used to create qr codes
 class CreateQR(APIView):
+    permission_classes = [IsAuthenticated]
     # It takes a plant id, creates a QR code with the url of the plant detail page, and returns the QR
     # code as a base64 encoded string
     def get(self, request):
@@ -276,6 +282,7 @@ class PlantaDetailView(DetailView):
 
 # This class is used to get data of a single plant using its traditional name
 class PlantaGetView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         """
         It gets the plant with the name passed in the url, and if it exists, it returns the plant's data in
