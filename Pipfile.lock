@@ -154,7 +154,7 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==4.37.3"
-
+        },	
         "djangorestframework-simplejwt": {
             "hashes": [
                 "sha256:a60b09afb27d91ad1d7ac904cc632bd52cecead8f389f0fa1532ceb0fb757a74",
@@ -432,7 +432,7 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==2.8.2"
-
+        },
         "pyjwt": {
             "hashes": [
                 "sha256:8d82e7087868e94dd8d7d418e5088ce64f7daab4b36db654cbaedb46f9d1ca80",
