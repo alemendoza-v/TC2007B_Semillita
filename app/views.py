@@ -1,3 +1,4 @@
+from asyncore import write
 from fileinput import filename
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -22,7 +23,7 @@ from io import BytesIO
 
 import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 
 # This class is a viewset that allows us to create, retrieve, update, and delete Usos objects.
 class UsosViewSet(viewsets.ModelViewSet):
@@ -189,29 +190,16 @@ class AnaliticosViewSet(viewsets.ViewSet):
 
                 y_pos = np.arange(len(plant_list))
                 names = [dic["name"] for dic in plant_list]
-                print(names)
                 performance = [dic["count"] for dic in plant_list]
-                print(performance)
 
                 plt.bar(y_pos, performance, align='center', alpha=0.5)
                 plt.xticks(y_pos, names)
                 plt.ylabel('Visitas')
-                plt.title('Visitas por planta')
-                
-                #with BytesIO() as f:
-                #    plt.save(f, format='PDF')
-                #    img_decoded = base64.b64encode(f.getvalue()).decode('ascii')
-                #    return Response(img_decoded, status=status.HTTP_200_OK)
+                plt.title('Visitas por planta') 
 
-                #plt.savefig('foo.pdf')
-                plt.show()
-
-                #OTRA GRÁFICA
-                plt.scatter(y_pos, performance)
-                plt.xticks(y_pos, names)
-                plt.ylabel('Visitas')
-                plt.title('Visitas por planta')
-                plt.show()
+                buffer = BytesIO()
+                plt.savefig(buffer, format='png')
+                buffer.seek(0)                
 
                 # It's getting the top 3 plants with the most number of Analiticos objects associated with
                 # them.
@@ -219,7 +207,12 @@ class AnaliticosViewSet(viewsets.ViewSet):
                 # We serualize the data and return it as a response.
                 popularPlantsSerialized = [PlantaSerializer(plant).data for plant in Planta.objects.filter(id__in=popularPlantsSortedIDs)]
 
-                return Response(popularPlantsSerialized, status=status.HTTP_200_OK)
+                response = {
+                    'popularPlants': popularPlantsSerialized,
+                    'graph': base64.b64encode(buffer.read()).decode('ascii')
+                } 
+
+                return Response(response, status=status.HTTP_200_OK)
 
             except:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
