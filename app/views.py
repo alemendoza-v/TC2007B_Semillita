@@ -20,6 +20,10 @@ import base64
 import qrcode
 from io import BytesIO
 
+import matplotlib.pyplot as plt; plt.rcdefaults()
+import numpy as np
+import matplotlib.pyplot as plt
+
 # This class is a viewset that allows us to create, retrieve, update, and delete Usos objects.
 class UsosViewSet(viewsets.ModelViewSet):
     queryset = Uso.objects.all().order_by('nombre')
@@ -179,8 +183,35 @@ class AnaliticosViewSet(viewsets.ViewSet):
                 for plant in Planta.objects.all():
                     temp_plant_dict = {}
                     temp_plant_dict['id'] = plant.id
+                    temp_plant_dict['name'] = plant.nombre_tradicional
                     temp_plant_dict['count'] = Analiticos.objects.all().filter(planta_id=plant.id).count()
                     plant_list.append(temp_plant_dict)
+
+                y_pos = np.arange(len(plant_list))
+                names = [dic["name"] for dic in plant_list]
+                print(names)
+                performance = [dic["count"] for dic in plant_list]
+                print(performance)
+
+                plt.bar(y_pos, performance, align='center', alpha=0.5)
+                plt.xticks(y_pos, names)
+                plt.ylabel('Visitas')
+                plt.title('Visitas por planta')
+                
+                #with BytesIO() as f:
+                #    plt.save(f, format='PDF')
+                #    img_decoded = base64.b64encode(f.getvalue()).decode('ascii')
+                #    return Response(img_decoded, status=status.HTTP_200_OK)
+
+                #plt.savefig('foo.pdf')
+                plt.show()
+
+                #OTRA GRÁFICA
+                plt.scatter(y_pos, performance)
+                plt.xticks(y_pos, names)
+                plt.ylabel('Visitas')
+                plt.title('Visitas por planta')
+                plt.show()
 
                 # It's getting the top 3 plants with the most number of Analiticos objects associated with
                 # them.
