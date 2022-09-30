@@ -299,11 +299,14 @@ class PlantaDetailView(DetailView):
     the new context data
     :return: The context is a dictionary that contains the data that is used to render the template.
     """
-    exclude = ['id', 'descripcion', 'created_at', 'updated_at']
+    exclude = ['id', 'created_at', 'updated_at']
     template_name = 'planta_detail.html'
 
     def get_context_data(self, **kwargs):
         # Create analiticos registry
+        registry = Analiticos.objects.create(planta_id=kwargs['object'].id)
+        registry.save()
+        # Get the context from the parent class
         context = super().get_context_data(**kwargs)
         context['usos'] = list(context['object'].usos.all())
         context['imagen'] = str(context['object'].Pimagenes.all()[0].dato)
