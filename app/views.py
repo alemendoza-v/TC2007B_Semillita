@@ -112,6 +112,34 @@ class PlantaViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+        data = request.data
+        try:
+            plant = get_object_or_404(Planta, pk=kwargs['id'])
+            plant.nombre_cientifico = data['nombre_cientifico']
+            plant.nombre_tradicional = data['nombre_tradicional']
+            plant.especie = data['especie']
+            plant.origen = data['origen']
+            plant.temporada = data['temporada']
+            plant.descripcion = data['descripcion']
+            plant.fertilizante = data['fertilizante']
+            plant.riego = data['riego']
+            plant.iluminacion = data['iluminacion']
+            plant.usos.clear()
+            for u in data['usos']:
+                uso = Uso.objects.get(id=u)
+                plant.usos.add(uso)
+            plant.save()
+            imgs = get_object_or_404(Imagen, planta=plant)
+            imgs.delete()
+            context = {
+                'request': request,
+            }
+            serializer = PlantaSerializer(plant, context=context)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
             
 # This class is a viewset that allows you to create, retrieve, update, and delete images
 class ImagenViewSet(viewsets.ModelViewSet):
@@ -219,28 +247,6 @@ class AnaliticosViewSet(viewsets.ViewSet):
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         else: # If there are no Analiticos objects in the database
             return Response(status=status.HTTP_204_NO_CONTENT)
-
-"""
-# This class is used to log in users
-class UserLogInView(APIView):
-    def post(self, request):
-        
-        If the user is authenticated, return the user's first name. Otherwise, return an error message
-        
-        :param request: The request object
-        :return: Text that tells the user if they were authenticated or not.
-        
-        try:
-            username = request.data['username']
-            password = request.data['password']
-            # It's authenticating the user.
-            user = authenticate(username=username, password=password)
-            if user is not None: # If the user is authenticated
-                return Response("Usuario autenticado", status=status.HTTP_200_OK)
-        except: # If the user is not authenticated
-            return Response("Usuario no encontrado o contraseña equivocada", status=status.HTTP_400_BAD_REQUEST)
-"""
-
 
 # This class is used to create qr codes
 class CreateQR(APIView):
