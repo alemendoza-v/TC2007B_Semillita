@@ -182,7 +182,7 @@ class AnaliticosViewSet(viewsets.ViewSet):
             try:
                 plant_list = []
 
-                for plant in Planta.objects.all():
+                for plant in Planta.objects.all().filter(estatus=True):
                     temp_plant_dict = {}
                     temp_plant_dict['id'] = plant.id
                     temp_plant_dict['name'] = plant.nombre_tradicional
