@@ -131,8 +131,9 @@ class PlantaViewSet(viewsets.ModelViewSet):
                 uso = Uso.objects.get(id=u)
                 plant.usos.add(uso)
             plant.save()
-            imgs = get_object_or_404(Imagen, planta=plant)
-            imgs.delete()
+            imgs = Imagen.objects.all().filter(planta_id=kwargs['id'])
+            if imgs.exists():
+                imgs.delete()
             context = {
                 'request': request,
             }
