@@ -286,10 +286,10 @@ class CreateQR(APIView):
                 smtp.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASS'))
                 smtp.send_message(new_email)
                 
-            return Response(status=status.HTTP_200_OK)
+            return Response("QR Enviado Exitosamente", status=status.HTTP_200_OK)
 
         except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response("QR No Enviado", status=status.HTTP_400_BAD_REQUEST)
 
 # This class is used to send information to the plant detail page
 class PlantaDetailView(DetailView):
