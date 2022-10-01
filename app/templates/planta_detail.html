@@ -1,82 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     {% load static %}
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/textos.css' %}">
-    <link rel="stylesheet" href="{% static 'css/vistaPlanta.css' %}">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/textos.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/vistaPlanta.css' %}" />
+
     <title>Planta</title>
+  </head>
 
-</head>
-
-<body>
-    <center><div class="vista">
-        
+  <body>
+    <center>
+      <div class="vista">
         <div>
-            <div class = "titulo" id = "nombre"> 
-                {{ object.nombre_tradicional }}
+          <div class="titulo" id="nombre">{{ object.nombre_tradicional }}</div>
+        </div>
+
+        <div class="espaciochico"></div>
+        <div class="espaciochico"></div>
+
+        <div>
+          <div class="cuadroImagen">
+            <img class="imagenP" src="data:image/jpeg;base64,{{imagen}}" />
+          </div>
+        </div>
+
+        <div class="espaciochico"></div>
+        <div class="espaciochico"></div>
+
+        <div>
+          <div class="subNombre" id="subNombre">
+            {{ object.nombre_cientifico }}
+          </div>
+          <div class="espaciochico"></div>
+          <div class="descripcion">{{ object.descripcion }}</div>
+        </div>
+        <div class="espaciochico"></div>
+
+        <div>
+          <div class="subNombre" id="origen">Origen</div>
+          <div class="espaciochico"></div>
+          {{ object.origen }}
+        </div>
+        <div class="espaciochico"></div>
+
+        <div>
+          <div class="subNombre" id="usos">Usos</div>
+          <div class="espaciochico"></div>
+          <div class="lista">
+            <div style="float: left; padding-left: 10vw; width: 100vw">
+              <ul>
+                {% for uso in usos %}
+                <li>{{uso}}</li>
+                {% endfor %}
+              </ul>
             </div>
+          </div>
         </div>
-        
-        <div class = "espaciochico"></div>
-        <div class = "espaciochico"></div>
-
+        <div class="espaciochico"></div>
         <div>
-            <div class="cuadroImagen">
-                <img class = "imagenP" src = "data:image/jpeg;base64,{{imagen}}">
-            </div>
-        </div>
-
-        <div class = "espaciochico"></div><div class = "espaciochico"></div>
-        
-        <div>
-            <div class = "subNombre" id = "subNombre">
-                {{ object.nombre_cientifico }}
-            </div>
-            <div class = "espaciochico"></div>
-            <div class="descripcion">
-                {{ object.descripcion }}
-            </div>
-        </div>
-        <div class = "espaciochico"></div>
-
-        <div>
-            <div class = "subNombre" id = "origen">Origen</div>
-            <div class = "espaciochico"></div>
-            {{ object.origen }}
-        </div>
-        <div class = "espaciochico"></div>
-           
-
-        <div>
-            <div class = "subNombre" id = "usos">Usos</div>
-            <div class = "espaciochico"></div>
-            <div class="lista" >
-            <ul>
-               {% for uso in usos %}
-               <li>{{uso}}</li>
-               {% endfor %}
-            </ul>    
-            </div>  
-        </div>
-        <div class = "espaciochico"></div>
-           
-        <div>
-            <div class = "subNombre" id = "cuidados">Cuidados</div>
-            <div class = "espaciochico"></div>
-            <ul>
-                <li>{{ object.riego }}</li>
-                <li>{{ object.fertilizante }}</li>
-                <li>{{ object.iluminacion }}</li>
+          <div class="subNombre" id="cuidados">Cuidados</div>
+          <div class="espaciochico"></div>
+          <div style="float: left; padding: 5px; width: 45vw">
+            <ul style="display: inline-block; text-align: left">
+              <li>{{ object.riego }}</li>
+              <li>{{ object.fertilizante }}</li>
+              <li>{{ object.iluminacion }}</li>
             </ul>
+          </div>
+          <div style="float: left; padding: 5px; width: 25vw">
+            <img id="semillines" width="100%" height="auto" src="" />
+          </div>
         </div>
-        <br>
-
-    </div></center>
-
-
-</body>
+        <script>
+          let x = Math.round(Math.random() * (4 - 1) + 1);
+          if (x == 1) {
+            document.getElementById("semillines").src =
+              "{% static 'images/semillin1.png' %}";
+          } else if (x == 2) {
+            document.getElementById("semillines").src =
+              "{% static 'images/semillin2.png' %}";
+          } else if (x == 3) {
+            document.getElementById("semillines").src =
+              "{% static 'images/semillin3.png' %}";
+          } else {
+            document.getElementById("semillines").src =
+              "{% static 'images/semillin4.png' %}";
+          }
+        </script>
+        <br />
+      </div>
+    </center>
+  </body>
 </html>
