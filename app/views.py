@@ -324,7 +324,7 @@ class PlantaGetView(APIView):
         :return: The plant object in JSON format
         """
         try:
-            plant = get_object_or_404(Planta, nombre_tradicional=kwargs['nombre_tradicional'])
+            plant = Planta.objects.all().filter(nombre_tradicional=kwargs['nombre_tradicional']).filter(estatus=True)[0]
             serializer = PlantaSerializer(plant)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
