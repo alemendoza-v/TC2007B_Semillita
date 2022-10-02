@@ -21,7 +21,6 @@ from io import BytesIO
 
 import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
-from matplotlib.backends.backend_pdf import PdfPages
 
 # This class is a viewset that allows us to create, retrieve, update, and delete Usos objects.
 class UsosViewSet(viewsets.ModelViewSet):
@@ -88,6 +87,7 @@ class PlantaViewSet(viewsets.ModelViewSet):
         :return: It's returning a Response object with the status code 204.
         """
         try:
+            # Getting the planta object from the database.
             planta = get_object_or_404(Planta, pk=kwargs['id'])
             # It's changing the estatus attribute of the plant object to False.
             planta.estatus = False
@@ -100,10 +100,11 @@ class PlantaViewSet(viewsets.ModelViewSet):
         """
         It takes a request, and returns a response
         
-        :param request: The request plant object
+        :param kwargs: The request plant object id
         :return: The retrieved plant object.
         """
         try:
+            # Getting the planta object from the database.
             planta = get_object_or_404(Planta, pk=kwargs['id'])
             context = {
                 'request': request,
@@ -114,9 +115,17 @@ class PlantaViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
+        """
+        I'm trying to update a plant object, and I'm trying to update the usos field
+        
+        :param request: The request object
+        :return: The updated plant object.
+        """
         data = request.data
         try:
+            # Getting the plant object from the database.
             plant = get_object_or_404(Planta, pk=kwargs['id'])
+            # It's updating the plant object.
             plant.nombre_cientifico = data['nombre_cientifico']
             plant.nombre_tradicional = data['nombre_tradicional']
             plant.especie = data['especie']
@@ -127,10 +136,12 @@ class PlantaViewSet(viewsets.ModelViewSet):
             plant.riego = data['riego']
             plant.iluminacion = data['iluminacion']
             plant.usos.clear()
+            # It's adding the usos to the plant object.
             for u in data['usos']:
                 uso = Uso.objects.get(id=u)
                 plant.usos.add(uso)
             plant.save()
+            # Deleting all the images that are associated with the plant.
             imgs = Imagen.objects.all().filter(planta_id=kwargs['id'])
             if imgs.exists():
                 imgs.delete()
@@ -167,6 +178,7 @@ class ImagenViewSet(viewsets.ModelViewSet):
             image = request.FILES.get('dato').read()
             image_encoded = base64.b64encode(image).decode('ascii')
 
+            # Creating a new image object and saving it to the database.
             new_image = Imagen.objects.create(
                 dato=image_encoded,
                 tipo=data['tipo'],
@@ -204,8 +216,7 @@ class AnaliticosViewSet(viewsets.ViewSet):
         """
         I'm getting the top 3 plants with the most number of Analiticos objects associated with them
         
-        :param response: The response object that will be returned to the client
-        :return: A list of dictionaries.
+        :return: A JSON object with the information of the top 3 plants with the most number of Analiticos objects associated with them and a graph in base64 format.
         """
         if Analiticos.objects.all().count() > 0: # If there are any Analiticos objects in the database
             try:
@@ -237,8 +248,10 @@ class AnaliticosViewSet(viewsets.ViewSet):
                 # We serualize the data and return it as a response.
                 popularPlantsSerialized = [PlantaSerializer(plant).data for plant in Planta.objects.filter(id__in=popularPlantsSortedIDs)]
 
+                # Creating the reponse object.
                 response = {
                     'popularPlants': popularPlantsSerialized,
+                    # Reading the image file and converting it into a base64 string.
                     'graph': base64.b64encode(buffer.read()).decode('ascii')
                 } 
 
@@ -252,9 +265,14 @@ class AnaliticosViewSet(viewsets.ViewSet):
 # This class is used to create qr codes
 class CreateQR(APIView):
     permission_classes = [IsAuthenticated]
-    # It takes a plant id, creates a QR code with the url of the plant detail page, and returns the QR
-    # code as a base64 encoded string
     def get(self, request):
+        """
+        It takes a plant id, creates a QR code with the url of the plant detail page, and returns the QR
+        code as a base64 encoded string
+        
+        :param request: The request object that contains the plant id
+        :return: The image is being returned as a base64 encoded string.
+        """
         try:
             data = request.GET['planta_id']
             plant = get_object_or_404(Planta, pk=data)
@@ -269,20 +287,30 @@ class CreateQR(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
     
     def post(self, request):
+        """
+        It takes the image from the request, gets the email of the user, creates an email message, adds
+        the image as an attachment, and sends the email
+        
+        :param request: The request object that contains the image
+        :return: The image is being returned as a string.
+        """
         try:
             image = request.FILES.get('dato').read()
 
             sender_email = os.getenv('EMAIL_USER')
-            receiver_email = User.objects.get(first_name= 'Alejandro').email
+            receiver_email = User.objects.get(first_name= 'Ezequiel').email
             subject = "Codigo QR para la planta " + request.data['nombre_tradicional']
 
+            # Creating a new email object.
             new_email = EmailMessage()
             new_email['Subject'] = subject
             new_email['From'] = sender_email
             new_email['To'] = receiver_email
 
+            # Adding the image to the email as an attachment.
             new_email.add_attachment(image, maintype='image', subtype='png', filename=request.data['nombre_tradicional'] + '.png')
 
+            # Sending an email to the user.
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
                 smtp.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASS'))
                 smtp.send_message(new_email)
