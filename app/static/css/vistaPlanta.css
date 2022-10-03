@@ -5,7 +5,7 @@ body {
   box-shadow: 2px 2px 2px black;
   background-color: white;
   width: 88vw;
-  height: 800px;
+  height: min-content;
   padding-left: 2vw;
   padding-right: 2vw;
   padding-top: 2em;
