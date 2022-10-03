@@ -18,6 +18,7 @@ from email.message import EmailMessage
 import base64
 import qrcode
 from io import BytesIO
+import json
 
 import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
@@ -229,6 +230,18 @@ class AnaliticosViewSet(viewsets.ViewSet):
                     temp_plant_dict['count'] = Analiticos.objects.all().filter(planta_id=plant.id).count()
                     plant_list.append(temp_plant_dict)
 
+                # It's getting the top 3 plants with the most number of Analiticos objects associated with
+                # them.
+                popularPlantsSortedIDs = [plant['id'] for plant in sorted(plant_list, key=lambda x: x['count'], reverse=True)[0:3]]
+                # We serualize the data and return it as a response.
+                popularPlantsSerialized = []
+                for id in popularPlantsSortedIDs:
+                    print(id)
+                    plant = get_object_or_404(Planta, pk=id)
+                    print(plant)
+                    serializer = PlantaSerializer(plant)
+                    popularPlantsSerialized.append(serializer.data)
+
                 y_pos = np.arange(len(plant_list))
                 names = [dic["name"] for dic in plant_list]
                 performance = [dic["count"] for dic in plant_list]
@@ -241,12 +254,6 @@ class AnaliticosViewSet(viewsets.ViewSet):
                 buffer = BytesIO()
                 plt.savefig(buffer, format='png')
                 buffer.seek(0)                
-
-                # It's getting the top 3 plants with the most number of Analiticos objects associated with
-                # them.
-                popularPlantsSortedIDs = [plant['id'] for plant in sorted(plant_list, key=lambda x: x['count'], reverse=True)[0:3]]
-                # We serualize the data and return it as a response.
-                popularPlantsSerialized = [PlantaSerializer(plant).data for plant in Planta.objects.filter(id__in=popularPlantsSortedIDs)]
 
                 # Creating the reponse object.
                 response = {
