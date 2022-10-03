@@ -44,14 +44,14 @@
           <div class="espaciochico"></div>
           {{ object.origen }}
         </div>
-        <div class="espaciochico"></div>
+        
 
         <div>
-          <div class="subNombre" id="usos">Usos</div>
           <div class="espaciochico"></div>
+          <div class="subNombre" id="usos">Usos</div>
           <div class="lista">
-            <div style="float: left; padding-left: 10vw; width: 100vw">
-              <ul>
+            <div style="float: left; padding-left: 10vw; width: 70vw; padding-right: 20vw;">
+              <ul style="display: inline-block; text-align: left">
                 {% for uso in usos %}
                 <li>{{uso}}</li>
                 {% endfor %}
@@ -59,8 +59,9 @@
             </div>
           </div>
         </div>
-        <div class="espaciochico"></div>
+        
         <div>
+          <div class="espaciochico"></div>
           <div class="subNombre" id="cuidados">Cuidados</div>
           <div class="espaciochico"></div>
           <div style="float: left; padding: 5px; width: 45vw">
@@ -70,10 +71,12 @@
               <li>{{ object.iluminacion }}</li>
             </ul>
           </div>
-          <div style="float: left; padding: 5px; width: 25vw">
-            <img id="semillines" width="100%" height="auto" src="" />
-          </div>
         </div>
+
+        <div style="float: left; padding: 5px; width: 25vw">
+          <img id="semillines" width="100%" height="auto" src="" />
+        </div>
+
         <script>
           let x = Math.round(Math.random() * (4 - 1) + 1);
           if (x == 1) {
