@@ -7,7 +7,6 @@ from app.models import Planta, Imagen, Analiticos, Uso
 from app.serializers import PlantaSerializer, ImagenSerializer, UsoSerializer
 
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from django.views.generic.detail import DetailView
 from django.urls import reverse
@@ -18,7 +17,6 @@ from email.message import EmailMessage
 import base64
 import qrcode
 from io import BytesIO
-import json
 
 import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
@@ -194,21 +192,22 @@ class ImagenViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
+            
+    """
     def retrieve(self, pk=None):
-        """
         It takes the image from the database and returns it as a response
         
         :param pk: The primary key of the image you want to retrieve
         :return: The image data and the content type of the image.
-        """
+        
         try:
             image = get_object_or_404(Imagen, pk=pk)
             
             return Response(image.dato, content_type=image.tipo, status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
+    """
+    
 # This class is a viewset that allows you to create, retrieve, update, and delete instances of the
 # Analiticos model.
 class AnaliticosViewSet(viewsets.ViewSet):
@@ -236,9 +235,7 @@ class AnaliticosViewSet(viewsets.ViewSet):
                 # We serualize the data and return it as a response.
                 popularPlantsSerialized = []
                 for id in popularPlantsSortedIDs:
-                    print(id)
                     plant = get_object_or_404(Planta, pk=id)
-                    print(plant)
                     serializer = PlantaSerializer(plant)
                     popularPlantsSerialized.append(serializer.data)
 
@@ -303,9 +300,8 @@ class CreateQR(APIView):
         """
         try:
             image = request.FILES.get('dato').read()
-
             sender_email = os.getenv('EMAIL_USER')
-            receiver_email = User.objects.get(first_name= 'Ezequiel').email
+            receiver_email = request.user.email
             subject = "Codigo QR para la planta " + request.data['nombre_tradicional']
 
             # Creating a new email object.
@@ -313,7 +309,6 @@ class CreateQR(APIView):
             new_email['Subject'] = subject
             new_email['From'] = sender_email
             new_email['To'] = receiver_email
-
             # Adding the image to the email as an attachment.
             new_email.add_attachment(image, maintype='image', subtype='png', filename=request.data['nombre_tradicional'] + '.png')
 
