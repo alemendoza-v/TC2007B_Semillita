@@ -1,7 +1,7 @@
 
 # Semillita 
 
-<p>Aplicación Web utilizada para la implementación de una aplicación para el Museo Semilla.</p>
+<p>Aplicación Web utilizada para la implementación de una aplicación móvil para el Museo Semilla.</p>
 
 <p>Nuestro proyecto consiste en una aplicación móvil desarrollada para iOS, dicha aplicación permite administrar la información del huerto del Museo Semilla.</p>
 
@@ -19,3 +19,10 @@
   * 3 plantas más populares
   * Gráfica de barras con la información de escaneos de todas las plantas
 * Vista de detalle de una planta en un browser (para visitantes y guías)
+
+#### Participantes
+
+* Alejandro Mendoza 
+* Abdiel Ramírez 
+* Fernando Realivázquez
+* Saghir Rodríguez
