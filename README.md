@@ -5,7 +5,7 @@
 
 <p>Nuestro proyecto consiste en una aplicación móvil desarrollada para iOS, dicha aplicación permite administrar la información del huerto del Museo Semilla.</p>
 
-#### Funcionalidades:
+### Funcionalidades:
 
 * Log In 
 * Añadir una planta al catálogo
@@ -20,13 +20,13 @@
   * Gráfica de barras con la información de escaneos de todas las plantas
 * Vista de detalle de una planta en un browser (para visitantes y guías)
 
-#### Participantes
+### Participantes
 
 * Alejandro Mendoza 
 * Abdiel Ramírez 
 * Fernando Realivázquez
 * Saghir Rodríguez
 
-#### Repositorio de Front End
+### Repositorio de Front End
 
 * https://github.com/saghor502/Semillita
