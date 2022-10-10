@@ -30,9 +30,9 @@ class TestPlantaViewSet(APITestCase):
 
     def test_list(self):
         # WHEN
-        request = self.client.get(self.uri, HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.get(self.uri, HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(response.status_code))
         print("Planta list test passed")
 
     def test_create_01(self):
@@ -51,9 +51,9 @@ class TestPlantaViewSet(APITestCase):
             'usos': ['1'],
         }
         # WHEN
-        request = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 201, 'Expected Response Code 201, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 201, 'Expected Response Code 201, received {0} instead.'.format(response.status_code))
         print("Planta create test 01 passed")
 
     def test_create_02(self):
@@ -69,9 +69,9 @@ class TestPlantaViewSet(APITestCase):
             'usos': ['1'],
         }
         # WHEN
-        request = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(response.status_code))
         print("Planta create test 02 passed")
 
     def test_retrieve_01(self):
@@ -89,9 +89,9 @@ class TestPlantaViewSet(APITestCase):
         )
         planta.usos.add(Uso.objects.create(nombre='Medicinal'))
         # WHEN
-        request = self.client.get(self.uri + str(planta.id) + '/', HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.get(self.uri + str(planta.id) + '/', HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(response.status_code))
         print("Planta retrieve test 01 passed")    
 
     def test_retrieve_02(self):
@@ -109,9 +109,9 @@ class TestPlantaViewSet(APITestCase):
         )
         # WHEN
         planta.usos.add(Uso.objects.create(nombre='Medicinal'))
-        request = self.client.get(self.uri + str(planta.id + 10) + '/', HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.get(self.uri + str(planta.id + 10) + '/', HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(response.status_code))
         print("Planta retrieve test 02 passed")
 
     def test_delete_01(self):
@@ -136,9 +136,9 @@ class TestPlantaViewSet(APITestCase):
             planta_id = planta.id,
         )
         # WHEN
-        request = self.client.delete(self.uri + str(planta.id) + '/', HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.delete(self.uri + str(planta.id) + '/', HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 204, 'Expected Response Code 204, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 204, 'Expected Response Code 204, received {0} instead.'.format(response.status_code))
         print("Planta delete test 01 passed")
 
     def test_delete_02(self):
@@ -163,9 +163,9 @@ class TestPlantaViewSet(APITestCase):
             planta_id = planta.id,
         )
         # WHEN
-        request = self.client.delete(self.uri + str(planta.id + 10) + '/', HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.delete(self.uri + str(planta.id + 10) + '/', HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(response.status_code))
         print("Planta delete test 02 passed")
     
     def test_update_01(self):
@@ -204,9 +204,9 @@ class TestPlantaViewSet(APITestCase):
             'usos': ['2'],
         }
         # WHEN
-        request = self.client.put(self.uri + str(planta.id) + "/", data, HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.put(self.uri + str(planta.id) + "/", data, HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(response.status_code))
         print("Planta update test 01 passed")
 
     def test_update_02(self):
@@ -245,9 +245,9 @@ class TestPlantaViewSet(APITestCase):
             'usos': ['2'],
         }
         # WHEN
-        request = self.client.put(self.uri + str(planta.id + 10) + "/", data, HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.put(self.uri + str(planta.id + 10) + "/", data, HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(response.status_code))
         print("Planta update test 02 passed")
     
     def test_update_03(self):
@@ -283,7 +283,7 @@ class TestPlantaViewSet(APITestCase):
             'usos': ['2'],
         }
         # WHEN
-        request = self.client.put(self.uri + str(planta.id + 10) + "/", data, HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.put(self.uri + str(planta.id + 10) + "/", data, HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(response.status_code))
         print("Planta update test 03 passed")

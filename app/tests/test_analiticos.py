@@ -43,7 +43,7 @@ class TestAnaliticosViewSet(APITestCase):
             planta=planta
         )
         # WHEN
-        request = self.client.get(self.uri, HTTP_AUTHORIZATION='Bearer ' + self.token)
+        response = self.client.get(self.uri, HTTP_AUTHORIZATION='Bearer ' + self.token)
         # THEN
-        self.assertEqual(request.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(response.status_code))
         print("Analiticos list test passed")
