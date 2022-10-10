@@ -48,9 +48,9 @@ class TestImagenViewSet(APITestCase):
             'planta_id': planta.id,
         }
         # WHEN
-        request = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 201, 'Expected Response Code 201, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 201, 'Expected Response Code 201, received {0} instead.'.format(response.status_code))
         print("Imagen create test 01 passed")
 
     def test_create_02(self):
@@ -74,9 +74,9 @@ class TestImagenViewSet(APITestCase):
             'planta_id': planta.id,
         }
         # WHEN
-        request = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 201, 'Expected Response Code 201, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 201, 'Expected Response Code 201, received {0} instead.'.format(response.status_code))
         print("Imagen create test 02 passed")
 
     def test_create_03(self):
@@ -100,7 +100,7 @@ class TestImagenViewSet(APITestCase):
             'planta_id': planta.id + 10,
         }
         # WHEN
-        request = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(response.status_code))
         print("Imagen create test 03 passed")

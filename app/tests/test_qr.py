@@ -42,9 +42,9 @@ class TestQrAPI(APITestCase):
         )
         planta.usos.add(Uso.objects.create(nombre='Medicinal'))
         # WHEN
-        request = self.client.get(self.uri + "?planta_id=" + str(planta.id), HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.get(self.uri + "?planta_id=" + str(planta.id), HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(response.status_code))
         print("Qr get test 01 passed")
 
     def test_get_02(self):
@@ -62,9 +62,9 @@ class TestQrAPI(APITestCase):
         )
         planta.usos.add(Uso.objects.create(nombre='Medicinal'))
         # WHEN
-        request = self.client.get(self.uri + "?planta_id=" + str(planta.id + 10), HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.get(self.uri + "?planta_id=" + str(planta.id + 10), HTTP_AUTHORIZATION="Bearer " + self.token)
         # THEN
-        self.assertEqual(request.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(response.status_code))
         print("Qr get test 02 passed")
 
     def test_post_01(self):
@@ -87,7 +87,7 @@ class TestQrAPI(APITestCase):
             'nombre_tradicional': planta.nombre_tradicional,
         }
         # WHEN
-        request = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token)
+        response = self.client.post(self.uri, data, HTTP_AUTHORIZATION="Bearer " + self.token, format='multipart')
         # THEN
-        self.assertEqual(request.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(request.status_code))
+        self.assertEqual(response.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(response.status_code))
         print("Qr post test 01 passed")
