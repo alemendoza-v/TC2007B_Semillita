@@ -1,7 +1,5 @@
 from rest_framework.test import APITestCase
 
-from django.core.files.uploadedfile import SimpleUploadedFile
-
 from app.models import Planta, Uso
 
 from django.contrib.auth.models import User
