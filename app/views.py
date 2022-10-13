@@ -346,7 +346,7 @@ class PlantaDetailView(DetailView):
 # This class is used to get data of a single plant using its traditional name
 class PlantaGetView(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         """
         It gets the plant with the name passed in the url, and if it exists, it returns the plant's data in
         JSON format
@@ -355,7 +355,7 @@ class PlantaGetView(APIView):
         :return: The plant object in JSON format
         """
         try:
-            plant = Planta.objects.all().filter(nombre_tradicional=kwargs['nombre_tradicional']).filter(estatus=True)[0]
+            plant = Planta.objects.all().filter(nombre_tradicional=request.query_params['nombre_tradicional']).filter(estatus=True)[0]
             serializer = PlantaSerializer(plant)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
