@@ -39,7 +39,7 @@ urlpatterns = [
     # The view for a plant.
     path('plantas/<int:pk>/', views.PlantaDetailView.as_view(), name='planta_detail'),
     # API to get a plant by its tradicional name.
-    path('api/planta/<str:nombre_tradicional>/', views.PlantaGetView.as_view()),
+    path('api/planta/', views.PlantaGetView.as_view()),
     # A view that will return access and refresh tokens when a user logs in.
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # A view that will return a token when a user refreshes it.
