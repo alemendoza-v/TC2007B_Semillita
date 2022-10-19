@@ -35,20 +35,24 @@
             {{ object.nombre_cientifico }}
           </div>
           <div class="espaciochico"></div>
-          <div class="descripcion">{{ object.descripcion }}</div>
+          <div class="descripcion" style="text-align:justify; padding: 10px;">{{ object.descripcion }}</div>
         </div>
         <div class="espaciochico"></div>
 
         <div>
           <div class="subNombre" id="origen">Temporada</div>
           <div class="espaciochico"></div>
+          <div class="espaciochico"></div>
           {{ object.temporada }}
+          <div class="espaciochico"></div>
         </div>
 
         <div>
           <div class="subNombre" id="origen">Origen</div>
           <div class="espaciochico"></div>
+          <div class="espaciochico"></div>
           {{ object.origen }}
+          <div class="espaciochico"></div>
         </div>
         
 
@@ -64,20 +68,22 @@
               </ul>
             </div>
           </div>
-        </div>
         
         <div>
           <div class="espaciochico"></div>
           <div class="subNombre" id="cuidados">Cuidados</div>
           <div class="espaciochico"></div>
-          <div style="padding-left: 10vw; width: 70vw; padding-right: 20vw;">
-            <ul style="display: inline-block; text-align: left">
-              <li>{{ object.riego }}</li>
-              <li>{{ object.fertilizante }}</li>
-              <li>{{ object.iluminacion }}</li>
-            </ul>
+          <div class="lista">
+            <div style="padding-left: 10vw; width: 70vw; padding-right: 20vw;">
+              <ul style="display: inline-block; text-align: left">
+                <li>{{ object.riego }}</li>
+                <li>{{ object.fertilizante }}</li>
+                <li>{{ object.iluminacion }}</li>
+              </ul>
+            </div>
           </div>
         </div>
+          
 
         <div style="padding: 5px; width: 25vw">
           <img id="semillines" width="100%" height="auto" src="" />
