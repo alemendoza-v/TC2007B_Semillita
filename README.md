@@ -1,5 +1,5 @@
 
-# Semillita 
+# ![](https://user-images.githubusercontent.com/31571759/196784651-d03cbbbe-13ae-43f2-8147-91078e69c805.png) Semillita
 
 <p>Aplicación Web utilizada para la implementación de una aplicación móvil para el Museo Semilla.</p>
 
